@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const movies = require("./data/movies.json");
+const users = require("./data/users.json");
 
 // create and config server
 const server = express();
@@ -37,6 +38,41 @@ server.get("/movies", (req, res) => {
     success: true,
     movies: filteredMovies,
   });
+});
+
+//POST login
+
+server.post("/login", (req, res) => {
+  const email = req.body.email;
+  const pass = req.body.password;
+  if (
+    users.find(
+      (user) => user.email === email
+    )
+  ) {
+    if (
+      users.find(
+        (user) => user.password === pass
+      )
+    ) {
+      res.json({
+        success: true,
+        userId: "123",
+      });
+    } else {
+      res.json({
+        success: false,
+        errorMessage:
+          "Contraseña incorrecta",
+      });
+    }
+  } else {
+    res.json({
+      success: false,
+      errorMessage:
+        "Usuario no encontrado",
+    });
+  }
 });
 
 //servidor de estáticos (imágenes)
