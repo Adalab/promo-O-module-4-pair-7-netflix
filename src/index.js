@@ -1,3 +1,4 @@
+//importar módulos de NodeJS
 const express = require("express");
 const cors = require("cors");
 const Database = require("better-sqlite3");
@@ -14,7 +15,7 @@ server.use(express.json());
 //Motor de plantillas
 server.set("view engine", "ejs");
 
-//Enpoint to 1 movie
+//Endpoint para 1 peli por id através de motor de plantillas
 server.get(
   "/movie/:movieId",
   (req, res) => {
@@ -34,11 +35,17 @@ const staticServerPath =
 server.use(
   express.static(staticServerPath)
 );
-
+//servidor de estáticos estilos
 const staticServerPathStyles =
   "./src/styles";
 server.use(
   express.static(staticServerPathStyles)
+);
+//servidor de estáticos (imágenes)
+const staticServerPathImg =
+  "./src/public-movies-images";
+server.use(
+  express.static(staticServerPathImg)
 );
 
 // init express aplication
@@ -49,6 +56,7 @@ server.listen(serverPort, () => {
   );
 });
 
+//pintar y filtrar pelis (todas)
 server.get("/movies", (req, res) => {
   const filterGender = req.query.gender;
   const sort = req.query.sort;
@@ -82,8 +90,7 @@ server.get("/movies", (req, res) => {
   }
 });
 
-//POST login
-
+//POST login (request por body)
 server.post("/login", (req, res) => {
   const email = req.body.email;
   const pass = req.body.password;
@@ -94,8 +101,6 @@ server.post("/login", (req, res) => {
     email,
     pass
   );
-  console.log(foundUser);
-
   if (foundUser) {
     if (foundUser.password === pass) {
       res.json({
@@ -117,10 +122,3 @@ server.post("/login", (req, res) => {
     });
   }
 });
-
-//servidor de estáticos (imágenes)
-const staticServerPathImg =
-  "./src/public-movies-images";
-server.use(
-  express.static(staticServerPathImg)
-);
