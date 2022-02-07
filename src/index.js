@@ -5,15 +5,12 @@ const db = new Database(
   "./src/db/database.db",
   { verbose: console.log }
 );
-
 // create and config server
 const server = express();
 server.use(cors());
 server.use(express.json());
-
 //Motor de plantillas
 server.set("view engine", "ejs");
-
 //Enpoint to 1 movie
 server.get(
   "/movie/:movieId",
@@ -27,18 +24,23 @@ server.get(
     res.render("movie", foundMovie);
   }
 );
-
 //servidor de estáticos
 const staticServerPath =
   "./src/public-react";
 server.use(
   express.static(staticServerPath)
 );
-
+//servidor de estáticos estilos
 const staticServerPathStyles =
   "./src/styles";
 server.use(
   express.static(staticServerPathStyles)
+);
+//servidor de estáticos (imágenes)
+const staticServerPathImg =
+  "./src/public-movies-images";
+server.use(
+  express.static(staticServerPathImg)
 );
 
 // init express aplication
@@ -48,7 +50,6 @@ server.listen(serverPort, () => {
     `Server listening at http://localhost:${serverPort}`
   );
 });
-
 server.get("/movies", (req, res) => {
   const filterGender = req.query.gender;
   const sort = req.query.sort;
@@ -81,9 +82,7 @@ server.get("/movies", (req, res) => {
     }*/
   }
 });
-
 //POST login
-
 server.post("/login", (req, res) => {
   const email = req.body.email;
   const pass = req.body.password;
@@ -94,8 +93,6 @@ server.post("/login", (req, res) => {
     email,
     pass
   );
-  console.log(foundUser);
-
   if (foundUser) {
     if (foundUser.password === pass) {
       res.json({
@@ -117,10 +114,3 @@ server.post("/login", (req, res) => {
     });
   }
 });
-
-//servidor de estáticos (imágenes)
-const staticServerPathImg =
-  "./src/public-movies-images";
-server.use(
-  express.static(staticServerPathImg)
-);
