@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-//const users = require("./data/users.json");
 const Database = require("better-sqlite3");
 const db = new Database(
   "./src/db/database.db",
@@ -53,9 +52,10 @@ server.listen(serverPort, () => {
 server.get("/movies", (req, res) => {
   const filterGender = req.query.gender;
   const sort = req.query.sort;
+
   if (filterGender === "") {
     const query = db.prepare(
-      "SELECT * FROM movies"
+      `SELECT * FROM movies ORDER BY title ${sort}`
     );
     const allMovies = query.all();
     return res.json({
@@ -64,7 +64,7 @@ server.get("/movies", (req, res) => {
     });
   } else {
     const query = db.prepare(
-      "SELECT * FROM movies WHERE gender = ? ORDER BY title DESC"
+      `SELECT * FROM movies WHERE gender = ? ORDER BY title ${sort}`
     );
     const foundMovies = query.all(
       filterGender
@@ -74,11 +74,11 @@ server.get("/movies", (req, res) => {
         success: true,
         movies: foundMovies,
       });
-    } else {
+    } /*else {
       return res.json(
         "No hay coincidencias."
       );
-    }
+    }*/
   }
 });
 
