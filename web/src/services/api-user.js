@@ -58,12 +58,13 @@ const getProfileFromApi = (userId) => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      "user-id": userId,
+      userId: userId,
     },
   })
     .then((response) => response.json())
     .then((data) => {
-      return data;
+      console.log(data);
+      return data.user;
     });
 };
 

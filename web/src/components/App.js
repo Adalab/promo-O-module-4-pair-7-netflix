@@ -125,6 +125,7 @@ const App = () => {
       .sendLoginToApi(loginData)
       .then((response) => {
         if (response.success === true) {
+          console.log(response.userId);
           setUserId(response.userId);
           // Si la usuaria introduce bien sus datos redireccionamos desde la página de login al inicio de la página
           router.redirect("/");
